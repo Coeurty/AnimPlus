@@ -1,0 +1,23 @@
+<Bindings>
+    <Binding
+        name="TogglePossess"
+        header="AnimPlus"
+        description="Toggle possess on the current target."
+    >
+        APTogglePossess()
+    </Binding>
+    <Binding
+        name="ToggleLastAura"
+        header="AnimPlus"
+        description="Toggle on the current target the last aura used."
+    >
+        APToggleLastAura()
+    </Binding>
+    <Binding
+        name="ToggleFreeze"
+        header="AnimPlus"
+        description="Toggle freeze aura the current target."
+    >
+        APToggleFreeze()
+    </Binding>
+</Bindings>
