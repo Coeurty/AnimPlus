@@ -2,7 +2,7 @@
 ## Title: AnimPlus
 ## Notes: To animate easier.
 ## Author: Franchouch
-## Version: 1.0
+## Version: 1.1.0
 ## SavedVariables: AnimPLusDB
 ## Bindings: bindings.xml
 Bindings.lua
@@ -16,6 +16,7 @@ Libs\AceConsole-3.0\AceConsole-3.0.xml
 Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceDB-3.0\AceDB-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
+Libs\AceComm-3.0\AceComm-3.0.xml
 
 Libs\libdatabroker-1.1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua

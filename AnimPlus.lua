@@ -1,6 +1,39 @@
+local currentVersion = "1.1.0"
+local broadcastChannelName = "animplus_comm"
+local versionPrefix = "APVersionCheck"
+
 AnimPlus = LibStub("AceAddon-3.0"):NewAddon("AnimPlus", "AceConsole-3.0")
 AnimPlusAceGUI = LibStub("AceGUI-3.0")
 local AnimPlusEvent = LibStub("AceEvent-3.0")
+local AnimPlusComm = LibStub("AceComm-3.0")
+
+-- Return if version received is highter than current version
+local function newVersionAvailable(current, received)
+    local currentParts = { strsplit(".", current) }
+    local receivedParts = { strsplit(".", received) }
+    for i = 1, math.max(#currentParts, #receivedParts) do
+        local currentNum = tonumber(currentParts[i]) or 0
+        local receivedNum = tonumber(receivedParts[i]) or 0
+        if receivedNum > currentNum then
+            return true
+        elseif receivedNum < currentNum then
+            return false
+        end
+    end
+    return false
+end
+
+local function SendVersion()
+    AnimPlusComm:SendCommMessage(versionPrefix, currentVersion, "CHANNEL", tostring(GetChannelName(broadcastChannelName)))
+end
+
+local newVersionNotified = false
+local function OnCommReceived(prefix, message, distribution, sender)
+    if prefix == versionPrefix and newVersionAvailable(currentVersion, message) and not newVersionNotified then
+        AnimPlus:Print("A new version is available : " .. message .. "")
+        newVersionNotified = true
+    end
+end
 
 local function CreateAnimPlusMinimapBtn(db)
     local function OnBrokerTooltipShow(tt)
@@ -32,21 +65,6 @@ local function OnPlayerTargetChanged()
     RefreshApAnimationWindow()
 end
 
--- Epsilon.utils.server.receive("DSPLY", function(message, channel, sender)
---     local records = { string.split(Epsilon.record, message) }
---     for _, record in pairs(records) do
---         local displayid = string.split(Epsilon.field, record)
---         if displayid ~= "" then
---             print(displayid)
---             local cmd = ".morph " .. displayid
---             print(cmd)
---             SendCmd(cmd)
---             -- targetMorphtext:SetText("Display: " .. tostring(displayid));
---             -- --print(targetMorphtext:GetText())
---         end
---     end
--- end)
-
 function AnimPlus:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("AnimPLusDB", {
         profile = {
@@ -60,10 +78,17 @@ function AnimPlus:OnInitialize()
 
     CreateAnimPlusMinimapBtn(self.db.profile.minimap)
 
+    JoinChannelByName(broadcastChannelName)
+    SendVersion()
+    AnimPlusComm:RegisterComm(versionPrefix, OnCommReceived)
+
     self:RegisterChatCommand("animplus", "HandleChatCommand")
     self:RegisterChatCommand("ap", "HandleChatCommand")
+    self:Print("Version " .. currentVersion)
     self:Print(
         "'/ap', '/ap edit' or minimap button to open me.\nKey binds are in the 'other' section, or you can use the slash format: '/ap cmd CommandName' (no spaces, each word first letter capitalized).")
+
+    AnimPlusEvent:RegisterEvent("GROUP_JOINED", SendVersion)
     AnimPlusEvent:RegisterEvent("PLAYER_TARGET_CHANGED", OnPlayerTargetChanged)
 end
 
@@ -86,8 +111,6 @@ function AnimPlus:HandleChatCommand(text)
         else
             print("Unknown command: " .. (args[2] or ""))
         end
-        -- elseif args[1] == "t" then
-        --     TestWindow()
     else
         ToggleApAnimationWindow()
     end
@@ -186,31 +209,3 @@ function CreateSpace(size)
     element:SetWidth(size)
     return element
 end
-
--- function TestWindow()
---     local fakeSpells = {
---         { icon = "ability_warrior_challange", label = "label1", spellId = 280292 },
---         { icon = "ability_warrior_challange", label = "label2", spellId = 300000 },
---     }
---     local window = AnimPlusAceGUI:Create("Window")
---     window:SetTitle("AnimPlus - Test")
---     -- window:SetHeight(370)
---     -- window:SetWidth(300)
---     -- window:EnableResize(true)
---     for _, o in ipairs(fakeSpells) do
---         local iconW = AnimPlusAceGUI:Create("Icon")
---         iconW:SetImage("Interface\\Icons\\" .. o.icon)
---         iconW:SetLabel(o.label)
---         iconW:SetImageSize(36, 36)
---         iconW:SetWidth(36, 36)
---         iconW:SetCallback("OnClick", function(widget, event, button)
---             print(button)
---             if button == "RightButton" then
---                 print("Right click on spell:", o.spellId)
---             else
---                 print("Left click on spell:", o.spellId)
---             end
---         end)
---         window:AddChild(iconW)
---     end
--- end
