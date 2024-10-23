@@ -1,4 +1,4 @@
-local currentVersion = "1.1.0"
+local currentVersion = "1.2.0"
 local broadcastChannelName = "animplus_comm"
 local versionPrefix = "APVersionCheck"
 

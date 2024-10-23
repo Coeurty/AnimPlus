@@ -2,7 +2,7 @@
 ## Title: AnimPlus
 ## Notes: To animate easier.
 ## Author: Franchouch
-## Version: 1.1.0
+## Version: 1.2.0
 ## SavedVariables: AnimPLusDB
 ## Bindings: bindings.xml
 Bindings.lua

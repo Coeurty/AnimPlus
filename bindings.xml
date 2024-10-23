@@ -1,5 +1,6 @@
 <Bindings>
     <Binding
+        header="AnimPlus"
         name="TogglePossess"
         description="Toggle possess on the current target."
     >
@@ -16,5 +17,11 @@
         description="Toggle freeze aura the current target."
     >
         APToggleFreeze()
+    </Binding>
+    <Binding
+        name="TogglePhaseDM"
+        description="Toggle phase dm."
+    >
+        APTogglePhaseDM()
     </Binding>
 </Bindings>

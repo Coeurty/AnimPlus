@@ -254,13 +254,17 @@ function CreateOrRefreshAuraTab(container)
         end)
     end)
 
+    local phaseDMButton = AnimPlusAceGUI:Create("Button")
+    phaseDMButton:SetText("Toggle phase dm")
+    phaseDMButton:SetWidth(150)
+    phaseDMButton:SetCallback("OnClick", APTogglePhaseDM)
 
     container:AddChildren(targetSelectLabel, targetSelect, modeSelectLabel, modeSelect)
     if GetTargetType() == "npc" then
         container:AddChildren(phaseForgeNpcCheckbox)
     end
     container:AddChildren(filterFieldLabel, filterFieldInput, clearFilterFieldButton, auraSelect,
-        possessButton, unauraAllButton)
+        possessButton, unauraAllButton, phaseDMButton)
 end
 
 local function HandleChangeEmote(emoteId, emoteSelect, npcRepeatEmote, playerEmoteAsStandstate)
@@ -385,7 +389,7 @@ local function CreateApAnimationWindow()
     ApAnimationWindow.frame:SetFrameStrata("BACKGROUND")
     ApAnimationWindow:SetLayout("Fill")
     ApAnimationWindow:SetTitle("AnimPlus - Animation")
-    ApAnimationWindow:SetHeight(235)
+    ApAnimationWindow:SetHeight(260)
     ApAnimationWindow:SetWidth(346)
     ApAnimationWindow:EnableResize(false)
     -- ApAnimationWindow.frame:SetMinResize(346, 210)
@@ -468,8 +472,13 @@ function APToggleFreeze()
     HandleToggleTargetAura(freezeSpell, nil, false)
 end
 
+function APTogglePhaseDM()
+    SendCmd(".phase dm")
+end
+
 ApAnimCommands = {
     TogglePossess = APTogglePossess,
     ToggleLastAura = APToggleLastAura,
     ToggleFreeze = APToggleFreeze,
+    TogglePhaseDM = APTogglePhaseDM,
 }
